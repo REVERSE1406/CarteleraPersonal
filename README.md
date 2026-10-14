@@ -18,3 +18,5 @@ npm install
 npm run dev
 ```
 
+Las pantallas de catálogo están protegidas: sin sesión se redirige a `/login`.
+
