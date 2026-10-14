@@ -152,8 +152,48 @@ input:focus {
   padding: 1.5rem;
 }
 
-.catalog-placeholder {
-  max-width: 640px;
+.catalog-page {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.catalog-header p {
+  margin: 0 0 1.4rem;
+  color: #c9c0b4;
+}
+
+.search-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.search-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #c9c0b4;
+}
+
+.search-status p,
+.search-hint,
+.search-empty {
+  margin: 0;
+  color: #c9c0b4;
+}
+
+.spinner {
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid rgba(240, 194, 122, 0.25);
+  border-top-color: #f0c27a;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .user-email {
