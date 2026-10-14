@@ -1,8 +1,15 @@
+import { useState } from 'react'
+import { ListaDetailModal } from '../components/ListaDetailModal'
 import { ListaGrid } from '../components/ListaGrid'
 import { useMiLista } from '../context/MiListaContext'
+import type { MiListaItem } from '../types/miLista'
 
 export function MyListPage() {
   const { items, isLoading, errorMessage } = useMiLista()
+  const [selectedItem, setSelectedItem] = useState<MiListaItem | null>(null)
+
+  const selected =
+    selectedItem === null ? null : (items.find((item) => item.id === selectedItem.id) ?? null)
 
   return (
     <section className="catalog-page">
@@ -28,7 +35,13 @@ export function MyListPage() {
         <p className="search-empty">Aún no tienes títulos guardados. Búscalos en el catálogo.</p>
       )}
 
-      {!isLoading && items.length > 0 && <ListaGrid items={items} />}
+      {!isLoading && items.length > 0 && (
+        <ListaGrid items={items} onSelectItem={setSelectedItem} />
+      )}
+
+      {selected !== null && (
+        <ListaDetailModal item={selected} onClose={() => setSelectedItem(null)} />
+      )}
     </section>
   )
 }

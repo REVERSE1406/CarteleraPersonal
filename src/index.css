@@ -296,6 +296,18 @@ input:focus {
   position: relative;
 }
 
+.lista-card-hit {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
 .estado-chip {
   color: #c9c0b4;
 }
@@ -344,4 +356,56 @@ input:focus {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 6, 8, 0.72);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 20;
+}
+
+.modal-card {
+  width: min(100%, 760px);
+  max-height: min(90vh, 820px);
+  overflow: auto;
+  background: #181416;
+  border: 1px solid rgba(240, 194, 122, 0.25);
+  border-radius: 18px;
+  padding: 1.1rem;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1.2rem;
+  padding-right: 5.5rem;
+}
+
+.modal-poster {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.detalle-comentario {
+  margin: 0.7rem 0;
+  color: #c9c0b4;
+}
+
+@media (max-width: 720px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+    padding-top: 2.2rem;
+  }
 }
