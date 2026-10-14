@@ -5,6 +5,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { PublicOnlyRoute } from './components/PublicOnlyRoute'
 import { CatalogPage } from './pages/CatalogPage'
 import { LoginPage } from './pages/LoginPage'
+import { ListaDetailPage } from './pages/ListaDetailPage'
 import { MyListPage } from './pages/MyListPage'
 import { SignUpPage } from './pages/SignUpPage'
 
@@ -22,6 +23,7 @@ export default function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<CatalogPage />} />
               <Route path="/mi-lista" element={<MyListPage />} />
+              <Route path="/mi-lista/:id" element={<ListaDetailPage />} />
             </Route>
           </Route>
 

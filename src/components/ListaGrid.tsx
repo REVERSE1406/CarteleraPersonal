@@ -1,9 +1,9 @@
+import { Link } from 'react-router-dom'
 import { ListaItemControls } from './ListaItemControls'
 import type { MiListaItem } from '../types/miLista'
 
 interface ListaGridProps {
   items: MiListaItem[]
-  onSelectItem: (item: MiListaItem) => void
 }
 
 function tipoLabel(tipo: MiListaItem['tipo_contenido']): string {
@@ -16,17 +16,12 @@ function estadoLabel(estado: MiListaItem['estado']): string {
   return 'Vista'
 }
 
-export function ListaGrid({ items, onSelectItem }: ListaGridProps) {
+export function ListaGrid({ items }: ListaGridProps) {
   return (
     <ul className="results-grid">
       {items.map((item) => (
         <li key={item.id} className="result-card lista-card">
-          <button
-            type="button"
-            className="lista-card-hit"
-            onClick={() => onSelectItem(item)}
-            aria-label={`Ver detalle de ${item.titulo}`}
-          >
+          <Link className="lista-card-hit" to={`/mi-lista/${item.id}`}>
             <div className="result-poster">
               {item.poster_url !== null ? (
                 <img src={item.poster_url} alt="" loading="lazy" />
@@ -43,7 +38,7 @@ export function ListaGrid({ items, onSelectItem }: ListaGridProps) {
                 <span className="estado-chip">{estadoLabel(item.estado)}</span>
               </p>
             </div>
-          </button>
+          </Link>
           <ListaItemControls item={item} />
         </li>
       ))}

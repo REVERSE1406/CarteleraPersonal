@@ -306,6 +306,7 @@ input:focus {
   text-align: left;
   cursor: pointer;
   font: inherit;
+  text-decoration: none;
 }
 
 .estado-chip {
@@ -407,5 +408,82 @@ input:focus {
     grid-template-columns: 1fr;
     padding-right: 0;
     padding-top: 2.2rem;
+  }
+}
+
+.lista-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  align-items: end;
+}
+
+.filter-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.filter-group legend {
+  margin-bottom: 0.4rem;
+  color: #c9c0b4;
+  font-size: 0.85rem;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  border: 1px solid rgba(240, 194, 122, 0.35);
+  background: transparent;
+  color: #f4efe6;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.chip-active {
+  background: #f0c27a;
+  color: #1a1412;
+  border-color: #f0c27a;
+}
+
+.sort-label {
+  display: grid;
+  gap: 0.35rem;
+  color: #c9c0b4;
+  font-size: 0.85rem;
+}
+
+.sort-label select {
+  border: 1px solid #3d3530;
+  background: #1d191b;
+  color: #f4efe6;
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+}
+
+.detalle-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.detalle-sinopsis {
+  color: #c9c0b4;
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .detalle-layout {
+    grid-template-columns: 1fr;
   }
 }

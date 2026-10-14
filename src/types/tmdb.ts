@@ -66,6 +66,12 @@ export interface CatalogSearchItem {
   overview: string
 }
 
+export interface TmdbTitleDetails {
+  overview: string
+  year: string | null
+  voteAverage: number | null
+}
+
 export class TmdbError extends Error {
   readonly statusCode: number | null
 

@@ -2,9 +2,11 @@ import {
   TMDB_API_BASE_URL,
   TMDB_IMAGE_BASE_URL,
   TmdbError,
+  type CatalogMediaType,
   type CatalogSearchItem,
   type TmdbSearchResponse,
   type TmdbSearchResult,
+  type TmdbTitleDetails,
 } from '../types/tmdb'
 
 function getTmdbApiKey(): string {
@@ -118,4 +120,43 @@ export async function searchTmdbMedia(
   return data.results
     .map(mapSearchResult)
     .filter((item): item is CatalogSearchItem => item !== null)
+}
+
+export async function fetchTmdbTitleDetails(
+  mediaType: CatalogMediaType,
+  tmdbId: number,
+  signal?: AbortSignal
+): Promise<TmdbTitleDetails> {
+  const params = new URLSearchParams({
+    api_key: getTmdbApiKey(),
+    language: 'es-ES',
+  })
+  const path = mediaType === 'movie' ? `movie/${tmdbId}` : `tv/${tmdbId}`
+
+  let response: Response
+  try {
+    response = await fetch(`${TMDB_API_BASE_URL}/${path}?${params.toString()}`, { signal })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw error
+    }
+    throw new TmdbError('No se pudo cargar el detalle en TMDB.')
+  }
+
+  if (!response.ok) {
+    throw new TmdbError('No se pudo cargar el detalle en TMDB.', response.status)
+  }
+
+  const payload = (await response.json()) as {
+    overview?: string
+    release_date?: string
+    first_air_date?: string
+    vote_average?: number
+  }
+
+  return {
+    overview: payload.overview ?? '',
+    year: extractYear(payload.release_date ?? payload.first_air_date),
+    voteAverage: typeof payload.vote_average === 'number' ? payload.vote_average : null,
+  }
 }
