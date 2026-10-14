@@ -57,7 +57,7 @@ export function MyListPage() {
       {!isLoading && items.length > 0 && (
         <>
           <ListaStats items={items} />
-          <ListaToolbar>
+          <ListaToolbar
             estado={estado}
             orden={orden}
             onEstadoChange={setEstado}
