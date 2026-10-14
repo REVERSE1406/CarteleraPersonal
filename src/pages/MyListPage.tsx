@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ListaGrid } from '../components/ListaGrid'
+import { ListaStats } from '../components/ListaStats'
 import { ListaToolbar, type EstadoFiltro, type OrdenLista } from '../components/ListaToolbar'
 import { useMiLista } from '../context/MiListaContext'
 import type { MiListaItem } from '../types/miLista'
@@ -55,7 +56,8 @@ export function MyListPage() {
 
       {!isLoading && items.length > 0 && (
         <>
-          <ListaToolbar
+          <ListaStats items={items} />
+          <ListaToolbar>
             estado={estado}
             orden={orden}
             onEstadoChange={setEstado}

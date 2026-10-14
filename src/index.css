@@ -411,6 +411,12 @@ input:focus {
   }
 }
 
+.lista-stats {
+  margin: 0 0 1rem;
+  color: #f0c27a;
+  font-weight: 600;
+}
+
 .lista-toolbar {
   display: flex;
   flex-wrap: wrap;
