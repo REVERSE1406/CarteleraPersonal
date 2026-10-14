@@ -196,6 +196,69 @@ input:focus {
   }
 }
 
+.results-grid {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.result-card {
+  background: rgba(24, 20, 22, 0.92);
+  border: 1px solid rgba(240, 194, 122, 0.16);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-poster {
+  aspect-ratio: 2 / 3;
+  background: #1d191b;
+}
+
+.result-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.poster-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #8d847a;
+  font-size: 0.85rem;
+}
+
+.result-meta {
+  padding: 0.75rem 0.8rem 0.9rem;
+}
+
+.result-meta h2 {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.3;
+}
+
+.result-meta p {
+  margin: 0.4rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #c9c0b4;
+  font-size: 0.82rem;
+}
+
+.result-type {
+  color: #f0c27a;
+  font-weight: 600;
+}
+
 .user-email {
   margin: 0.2rem 0 0;
   font-size: 0.9rem;

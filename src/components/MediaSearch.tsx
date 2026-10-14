@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { searchTmdbMedia } from '../services/tmdb'
 import { TmdbError, type CatalogSearchItem } from '../types/tmdb'
+import { SearchResults } from './SearchResults'
 
 type SearchStatus = 'idle' | 'loading' | 'success' | 'error'
 
@@ -88,6 +89,8 @@ export function MediaSearch() {
       {status === 'idle' && (
         <p className="search-hint">Empieza a escribir para buscar en The Movie Database.</p>
       )}
+
+      {status === 'success' && <SearchResults items={results} />}
     </section>
   )
 }
