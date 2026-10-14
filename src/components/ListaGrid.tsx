@@ -1,3 +1,4 @@
+import { ListaItemControls } from './ListaItemControls'
 import type { MiListaItem } from '../types/miLista'
 
 interface ListaGridProps {
@@ -35,6 +36,7 @@ export function ListaGrid({ items }: ListaGridProps) {
               <span className="estado-chip">{estadoLabel(item.estado)}</span>
             </p>
           </div>
+          <ListaItemControls item={item} />
         </li>
       ))}
     </ul>

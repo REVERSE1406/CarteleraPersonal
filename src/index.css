@@ -299,3 +299,49 @@ input:focus {
 .estado-chip {
   color: #c9c0b4;
 }
+
+.lista-controls {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0 0.8rem 0.9rem;
+}
+
+.lista-controls select,
+.lista-controls textarea {
+  width: 100%;
+  border: 1px solid #3d3530;
+  background: #1d191b;
+  color: #f4efe6;
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  font: inherit;
+}
+
+.rating-row {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.star {
+  border: 0;
+  background: transparent;
+  color: #5c534c;
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 0 0.1rem;
+}
+
+.star-active {
+  color: #f0c27a;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
