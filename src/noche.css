@@ -60,3 +60,20 @@
   .noche-indisponibles li { flex-direction:column; gap:.2rem; }
   .noche-indisponibles small { max-width:100%; text-align:left; }
 }
+.noche-guardar { width:100%; margin-top:.6rem; padding:.85rem 1.1rem; font-size:1rem; }
+.noche-historial { height:auto; margin-top:1.4rem; }
+.noche-sesion-guardada { border:1px solid #3d3530; border-radius:12px; margin:.8rem 0; overflow:hidden; }
+.noche-sesion-guardada summary { padding:1rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; cursor:pointer; list-style:none; }
+.noche-sesion-guardada summary::-webkit-details-marker { display:none; }
+.noche-sesion-guardada summary:focus-visible { outline:3px solid #f0c27a; outline-offset:-3px; }
+.noche-sesion-guardada summary::before { content:'▸'; color:#f0c27a; }
+.noche-sesion-guardada[open] summary::before { content:'▾'; }
+.noche-sesion-guardada summary span:first-child { flex:1; }
+.noche-sesion-guardada summary strong,.noche-sesion-guardada summary small { display:block; }
+.noche-sesion-guardada summary small { margin-top:.3rem; color:#c9c0b4; }
+.noche-duracion-total { color:#f0c27a; flex-shrink:0; font-size:.85rem; }
+.noche-sesion-detalle { padding:.4rem 1rem 1rem; border-top:1px solid #3d3530; }
+.noche-sesion-detalle > p { color:#c9c0b4; font-size:.87rem; }
+.noche-sesion-detalle ol { margin:0; padding-left:1.25rem; }
+.noche-sesion-detalle li { display:flex; align-items:center; justify-content:space-between; padding:.6rem 0; gap:1rem; border-bottom:1px solid #3d3530; }
+.noche-sesion-detalle li span:last-child { white-space:nowrap; color:#f0c27a; }

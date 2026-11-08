@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMiLista } from '../context/MiListaContext'
+import { useAuth } from '../context/AuthContext'
 import { calcularSesion, evaluarAgregar, PAUSA_MINUTOS, validarTiempoDisponible } from '../dominio/nocheDePelicula'
 import { fetchTmdbMovieRuntime } from '../services/tmdb'
+import { fetchSesionesNoche, guardarSesionNoche } from '../services/nocheDePelicula'
 import type { MiListaItem } from '../types/miLista'
-import type { DuracionPelicula } from '../types/nocheDePelicula'
+import type { DuracionPelicula, SesionNoche } from '../types/nocheDePelicula'
 
 const TAMANO_LOTE = 4
 
@@ -16,6 +18,13 @@ function formatearDuracion(minutos: number): string {
   return horas > 0 ? `${horas} h ${sobrantes.toString().padStart(2, '0')} min` : `${minutos} min`
 }
 
+function formatearFecha(fecha: string): string {
+  const valor = new Date(fecha)
+  return Number.isNaN(valor.getTime()) ? fecha : valor.toLocaleDateString('es-EC', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  })
+}
+
 function ordenarPorDuracion(a: MiListaItem, b: MiListaItem, resultados: Record<string, DuracionPelicula>): number {
   const aMinutos = resultados[a.id]?.duracionMinutos ?? Number.POSITIVE_INFINITY
   const bMinutos = resultados[b.id]?.duracionMinutos ?? Number.POSITIVE_INFINITY
@@ -23,6 +32,7 @@ function ordenarPorDuracion(a: MiListaItem, b: MiListaItem, resultados: Record<s
 }
 
 export function NocheDePeliculaPage() {
+  const { user } = useAuth()
   const { items, isLoading: cargandoLista, errorMessage: errorLista } = useMiLista()
   const [minutosTexto, setMinutosTexto] = useState('120')
   const [nombre, setNombre] = useState('Noche de película')
@@ -32,6 +42,28 @@ export function NocheDePeliculaPage() {
   const [fallosConsulta, setFallosConsulta] = useState(0)
   const [reintentos, setReintentos] = useState(0)
   const [mensaje, setMensaje] = useState<string | null>(null)
+  const [sesiones, setSesiones] = useState<SesionNoche[]>([])
+  const [cargandoSesiones, setCargandoSesiones] = useState(true)
+  const [errorSesiones, setErrorSesiones] = useState<string | null>(null)
+  const [reintentosSesiones, setReintentosSesiones] = useState(0)
+  const [guardando, setGuardando] = useState(false)
+  const [errorGuardado, setErrorGuardado] = useState<string | null>(null)
+  const [exito, setExito] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (user === null) return
+    let cancelado = false
+    setCargandoSesiones(true)
+    setErrorSesiones(null)
+    setSesiones([])
+    void fetchSesionesNoche(user.id)
+      .then((resultado) => { if (!cancelado) setSesiones(resultado) })
+      .catch((error: unknown) => {
+        if (!cancelado) setErrorSesiones(error instanceof Error ? error.message : 'No se pudo cargar el historial.')
+      })
+      .finally(() => { if (!cancelado) setCargandoSesiones(false) })
+    return () => { cancelado = true }
+  }, [user?.id, reintentosSesiones])
 
   const tiempo = validarTiempoDisponible(minutosTexto)
   const peliculasPorVer = useMemo(
@@ -130,6 +162,43 @@ export function NocheDePeliculaPage() {
     setMensaje(null)
   }
 
+  async function guardar() {
+    setErrorGuardado(null)
+    setExito(null)
+    if (user === null || tiempo.minutos === null || !nombreValido || seleccion.length === 0 ||
+        !calculo.valida || calculo.totalMinutos > tiempo.minutos) {
+      setErrorGuardado('Revisa el tiempo, el nombre y la selección antes de guardar.')
+      return
+    }
+    const peliculas = seleccion.map((pelicula) => ({
+      listaId: pelicula.id,
+      duracionMinutos: duraciones[pelicula.id]?.duracionMinutos,
+    }))
+    if (peliculas.some((pelicula) => pelicula.duracionMinutos == null)) {
+      setErrorGuardado('Todas las películas deben tener una duración conocida.')
+      return
+    }
+    setGuardando(true)
+    try {
+      const resultado = await guardarSesionNoche({
+        nombre: nombre.trim(),
+        tiempoDisponible: tiempo.minutos,
+        peliculas: peliculas.map((pelicula) => ({
+          listaId: pelicula.listaId,
+          duracionMinutos: pelicula.duracionMinutos!,
+        })),
+      })
+      setSesiones((actual) => [resultado, ...actual.filter((sesion) => sesion.id !== resultado.id)])
+      setSeleccionIds([])
+      setMensaje(null)
+      setExito(`«${resultado.nombre}» se guardó correctamente. Tus películas siguen «por ver».`)
+    } catch (error: unknown) {
+      setErrorGuardado(error instanceof Error ? error.message : 'No se pudo guardar. Inténtalo otra vez.')
+    } finally {
+      setGuardando(false)
+    }
+  }
+
   function quitarPelicula(id: string) {
     setSeleccionIds((actual) => actual.filter((seleccionado) => seleccionado !== id))
     setMensaje(null)
@@ -191,7 +260,14 @@ export function NocheDePeliculaPage() {
               onChange={(event) => setNombre(event.target.value)} aria-invalid={!nombreValido} />
             {!nombreValido && <p className="form-error">Escribe un nombre de 1 a 80 caracteres.</p>}
             <p className="noche-muted noche-pequeno">Las películas no pasarán a «vista» al guardar.</p>
-            <div className="noche-guardar-pendiente">Consulta y guardado de sesiones disponibles en el siguiente bloque.</div>
+            <button type="button" className="btn btn-primary noche-guardar" onClick={() => void guardar()}
+              disabled={guardando || seleccion.length === 0 || tiempo.minutos === null || !nombreValido ||
+                !calculo.valida || excedida || user === null}>
+              {guardando ? 'Guardando sesión…' : 'Guardar mi noche'}
+            </button>
+            {guardando && <p className="noche-muted" role="status">Guardando en tu cuenta…</p>}
+            {errorGuardado !== null && <p className="form-error" role="alert">{errorGuardado}</p>}
+            {exito !== null && <p className="form-info" role="status">{exito}</p>}
           </section>
         </div>
 
@@ -253,6 +329,28 @@ export function NocheDePeliculaPage() {
                 })}</ul>
               </div>
             )}
+          </section>
+          <section className="noche-panel noche-historial" aria-labelledby="titulo-historial">
+            <div className="noche-section-heading">
+              <div><p className="eyebrow">04 / Recuerda</p><h2 id="titulo-historial">Mis sesiones guardadas</h2></div>
+              <span className="badge noche-badge">{sesiones.length}</span>
+            </div>
+            {cargandoSesiones && <p className="search-status" role="status"><span className="spinner" aria-hidden="true" /> Cargando sesiones guardadas…</p>}
+            {errorSesiones !== null && <div className="noche-error-externo" role="alert"><p className="form-error">{errorSesiones}</p>
+              <button className="btn btn-ghost" type="button" onClick={() => setReintentosSesiones((actual) => actual + 1)}>Reintentar</button>
+            </div>}
+            {!cargandoSesiones && errorSesiones === null && sesiones.length === 0 && <p className="noche-muted">Todavía no tienes noches guardadas. Guarda una sesión para verla aquí.</p>}
+            {!cargandoSesiones && errorSesiones === null && sesiones.map((sesion) => (
+              <details className="noche-sesion-guardada" key={sesion.id}>
+                <summary><span><strong>{sesion.nombre}</strong><small>{formatearFecha(sesion.creada_en)} · {sesion.peliculas.length} película(s)</small></span><span className="noche-duracion-total">{formatearDuracion(sesion.duracion_total)}</span></summary>
+                <div className="noche-sesion-detalle"><p>Disponible: {formatearDuracion(sesion.tiempo_disponible)} · Pausas: {sesion.pausa_minutos} min entre películas · Restante: {sesion.tiempo_disponible - sesion.duracion_total} min</p>
+                  <ol>{sesion.peliculas.map((pelicula, indice) => <li key={`${pelicula.lista_id}-${indice}`}>
+                    <span>{pelicula.titulo}</span><span>{formatearDuracion(pelicula.duracion_minutos)}</span>
+                  </li>)}</ol>
+                  <p className="noche-muted noche-pequeno">Este plan se conserva aunque después retires una película de tu lista.</p>
+                </div>
+              </details>
+            ))}
           </section>
         </div>
       </div>
