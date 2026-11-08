@@ -7,6 +7,7 @@ import { CatalogPage } from './pages/CatalogPage'
 import { LoginPage } from './pages/LoginPage'
 import { ListaDetailPage } from './pages/ListaDetailPage'
 import { MyListPage } from './pages/MyListPage'
+import { NocheDePeliculaPage } from './pages/NocheDePeliculaPage'
 import { SignUpPage } from './pages/SignUpPage'
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
               <Route path="/" element={<CatalogPage />} />
               <Route path="/mi-lista" element={<MyListPage />} />
               <Route path="/mi-lista/:id" element={<ListaDetailPage />} />
+              <Route path="/noche-de-pelicula" element={<NocheDePeliculaPage />} />
             </Route>
           </Route>
 

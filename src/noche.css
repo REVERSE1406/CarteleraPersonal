@@ -1,0 +1,62 @@
+/* E2: Bootstrap 5 aporta rejilla y utilidades; tema del Proyecto 3 en DESIGN.md. */
+.noche-page { max-width: 1180px; }
+.noche-hero { display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:2.3rem 2.5rem; margin-bottom:1.5rem; border-radius:20px; border:1px solid rgba(240,194,122,.22); background:linear-gradient(125deg,#292018 0%,#181416 55%,#211722 100%); overflow:hidden; }
+.noche-hero h1 { font-size:clamp(2rem,4vw,3rem); font-weight:750; letter-spacing:-.04em; }
+.noche-hero h1 span { color:#f0c27a; }
+.noche-hero p:not(.eyebrow) { margin:.4rem 0 0; color:#c9c0b4; }
+.noche-hero-icon { width:130px; height:130px; flex-shrink:0; border-radius:100%; display:grid; place-items:center; font-size:7.5rem; line-height:1; color:#f0c27a; background:radial-gradient(circle,#704a27,#241916 65%); box-shadow:0 0 80px #d59a5030; }
+.noche-panel { padding:1.5rem; background:#181416; border:1px solid rgba(240,194,122,.18); border-radius:18px; height:100%; }
+.noche-plan { height:auto; }
+.noche-panel h2 { font-size:1.35rem; font-weight:750; margin:.3rem 0 1.2rem; color:#f4efe6; }
+.noche-panel h3 { font-size:1.05rem; font-weight:700; }
+.noche-label { display:block; margin:1rem 0 .45rem; font-weight:600; }
+.noche-input-row { position:relative; }
+.noche-input-row input { padding-right:5.6rem; font-size:1.5rem; font-weight:700; }
+.noche-input-row span { position:absolute; right:1rem; top:50%; transform:translateY(-50%); color:#c9c0b4; }
+.noche-help,.noche-muted { color:#c9c0b4; }
+.noche-help,.noche-pequeno { font-size:.86rem; }
+.noche-pausa { background:rgba(240,194,122,.075); border:1px solid rgba(240,194,122,.12); padding:.8rem; border-radius:12px; color:#c9c0b4; font-size:.86rem; margin-top:1rem; }
+.noche-pausa strong { color:#f0c27a; }
+.noche-separator { height:1px; background:rgba(240,194,122,.2); margin:1.5rem 0; }
+.noche-seleccion { margin:0 0 1rem; padding-left:1.5rem; }
+.noche-seleccion li { padding:.55rem 0; border-bottom:1px solid #3d3530; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.noche-seleccion strong { display:block; line-height:1.3; }
+.noche-seleccion small { display:block; color:#c9c0b4; margin-top:.25rem; }
+.noche-quitar { border-radius:999px; font-size:.76rem; padding:.35rem .6rem; flex-shrink:0; }
+.noche-resumen { border-radius:12px; border:1px solid #3d3530; margin:1rem 0; overflow:hidden; }
+.noche-resumen > div { display:flex; justify-content:space-between; align-items:center; gap:.5rem; padding:.7rem .85rem; border-bottom:1px solid #3d3530; }
+.noche-resumen > div:last-child { border-bottom:0; }
+.noche-resumen span { color:#c9c0b4; }
+.noche-resumen strong { text-align:right; }
+.noche-restante { color:#9fd4a8; }
+.noche-warning { color:#f08a8a; }
+.noche-guardar-pendiente { padding:1rem; border:1px dashed rgba(240,194,122,.35); border-radius:12px; font-size:.85rem; color:#c9c0b4; }
+.noche-section-heading { display:flex; align-items:start; justify-content:space-between; gap:1rem; }
+.noche-badge { color:#f0c27a; background:rgba(240,194,122,.12); border:1px solid rgba(240,194,122,.3); font-size:.78rem; margin-top:.3rem; }
+.noche-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; margin-top:1rem; }
+.noche-pelicula { overflow:hidden; background:#1d191b; border:1px solid #3d3530; border-radius:14px; display:flex; flex-direction:column; }
+.noche-poster { aspect-ratio:2 / 3; background:#242024; max-height:245px; overflow:hidden; }
+.noche-poster img { width:100%; height:100%; display:block; object-fit:cover; }
+.noche-pelicula-texto { display:flex; flex-direction:column; flex:1; padding:1rem; }
+.noche-pelicula-texto h3 { font-size:1rem; margin:0; }
+.noche-pelicula-texto p { font-size:.86rem; color:#f0c27a; margin:.4rem 0 1rem; }
+.noche-btn-pelicula { width:100%; margin-top:auto; border-radius:999px; font-size:.8rem; padding:.6rem .5rem; }
+.noche-aviso { display:block; font-size:.76rem; line-height:1.4; margin:.5rem 0 0; color:#c9c0b4; }
+.noche-indisponibles { border-top:1px solid #3d3530; margin-top:1.5rem; padding-top:1.3rem; }
+.noche-indisponibles ul { padding:0; margin:0; list-style:none; }
+.noche-indisponibles li { display:flex; justify-content:space-between; gap:1rem; padding:.8rem 0; border-bottom:1px solid #3d3530; }
+.noche-indisponibles small { color:#c9c0b4; max-width:58%; text-align:right; }
+.noche-error-externo { padding:1rem; border:1px solid #f08a8a70; border-radius:12px; display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; justify-content:space-between; }
+.noche-error-externo .btn { margin:0; }
+.noche-vacio { padding:1.5rem; border:1px dashed #3d3530; border-radius:12px; }
+.noche-page input:focus-visible,.noche-page button:focus-visible,.noche-page a:focus-visible,.app-nav a:focus-visible { outline:3px solid #f0c27a; outline-offset:3px; }
+.noche-page .btn-primary:disabled { opacity:.48; }
+@media (max-width:767px) {
+  .noche-hero { padding:1.5rem; }
+  .noche-hero-icon { display:none; }
+  .noche-panel { padding:1.2rem; }
+  .noche-grid { grid-template-columns:repeat(auto-fill,minmax(145px,1fr)); }
+  .noche-poster { max-height:210px; }
+  .noche-indisponibles li { flex-direction:column; gap:.2rem; }
+  .noche-indisponibles small { max-width:100%; text-align:left; }
+}

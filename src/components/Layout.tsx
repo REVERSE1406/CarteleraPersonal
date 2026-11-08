@@ -19,6 +19,7 @@ export function Layout() {
               Catálogo
             </NavLink>
             <NavLink to="/mi-lista">Mi lista</NavLink>
+            <NavLink to="/noche-de-pelicula">Noche de película</NavLink>
           </nav>
           <LogoutButton />
         </header>

@@ -1,7 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
+import './vendor/bootstrap.min.css'
 import './index.css'
+import './noche.css'
 
 const rootElement = document.getElementById('root')
 
