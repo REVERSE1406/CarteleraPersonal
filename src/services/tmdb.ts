@@ -160,3 +160,40 @@ export async function fetchTmdbTitleDetails(
     voteAverage: typeof payload.vote_average === 'number' ? payload.vote_average : null,
   }
 }
+
+/** Runtime oficial del detalle de película TMDB; null si no está informado. */
+export async function fetchTmdbMovieRuntime(
+  tmdbId: number,
+  signal?: AbortSignal
+): Promise<number | null> {
+  if (!Number.isSafeInteger(tmdbId) || tmdbId < 1) {
+    throw new TmdbError('Identificador de película inválido.')
+  }
+
+  const params = new URLSearchParams({
+    api_key: getTmdbApiKey(),
+    language: 'es-ES',
+  })
+
+  let response: Response
+  try {
+    response = await fetch(`${TMDB_API_BASE_URL}/movie/${tmdbId}?${params.toString()}`, { signal })
+  } catch (error: unknown) {
+    if (error instanceof DOMException && error.name === 'AbortError') throw error
+    throw new TmdbError('No se pudo consultar la duración en TMDB. Revisa tu conexión.')
+  }
+
+  if (!response.ok) {
+    throw new TmdbError(`TMDB no pudo cargar la duración (${response.status}).`, response.status)
+  }
+
+  const payload: unknown = await response.json()
+  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
+    throw new TmdbError('TMDB devolvió una respuesta inesperada.')
+  }
+
+  const duracion = (payload as Record<string, unknown>).runtime
+  return typeof duracion === 'number' && Number.isSafeInteger(duracion) && duracion > 0
+    ? duracion
+    : null
+}
