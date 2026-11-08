@@ -6,11 +6,11 @@ import {
 } from './nocheDePelicula'
 
 describe('tiempo disponible', () => {
-  it.each([30, 120, 600])('acepta el entero %i', (minutos) => {
+  it.each([30, 120, 600])('acepta el entero %i', (minutos: number) => {
     expect(validarTiempoDisponible(minutos)).toEqual({ valido: true, minutos, mensaje: null })
   })
   it.each(['', 'hola', '-1', '30.5', '  ', 'Infinity', 29, 601, Number.NaN])(
-    'rechaza tiempo inválido %s', (valor) => {
+    'rechaza tiempo inválido %s', (valor: string | number) => {
       expect(validarTiempoDisponible(valor)).toMatchObject({ valido: false, minutos: null })
     }
   )
@@ -30,8 +30,8 @@ describe('cálculo de sesión con pausas', () => {
   it('permite una selección vacía pero total 0 (guardado debe bloquearse)', () => {
     expect(calcularSesion([])).toMatchObject({ valida: true, pausasMinutos: 0, totalMinutos: 0 })
   })
-  it.each([[null], [0], [-3], [1.5]])('rechaza duración ausente o incorrecta: %s', (duraciones) => {
-    expect(calcularSesion(duraciones)).toMatchObject({ valida: false })
+  it.each([[null], [0], [-3], [1.5]])('rechaza duración ausente o incorrecta: %s', (valor: number | null) => {
+    expect(calcularSesion([valor])).toMatchObject({ valida: false })
   })
 })
 

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"docs/**/*.md\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"docs/**/*.md\"",
+    "test:offline": "node --experimental-strip-types scripts/test-dominio.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
