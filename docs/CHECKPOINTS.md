@@ -16,9 +16,9 @@ Los hashes son commits **locales existentes en este ZIP**, conservando el histor
 
 ## Checkpoint 3 · Implementación
 
-**Commit:** `5c2fb58` — `feat(E2-05): guardar sesiones, consultar historial y errores`
+**Commit:** `75b362e` — `docs(E2-06): README, verificaciones y auditoria con resultados reales`
 
-**Nota propuesta:** Se añadieron reglas puras y pruebas, SQL/RLS y RPC, servicios de TMDB/Supabase y la pantalla con formulario, selección, guardado e historial. Pendiente: ejecutar la migración en la cuenta Supabase, comprobar RLS con dos usuarios y verificar en navegador.
+**Nota propuesta:** Se añadieron reglas puras y pruebas, SQL/RLS y RPC, servicios de TMDB/Supabase y la pantalla completa; `docs/VERIFICACION.md` registra los resultados locales y los pasos manuales que faltan. Pendiente: ejecutar la migración en la cuenta Supabase, comprobar RLS con dos usuarios y verificar en navegador.
 
 ## Entrega final
 
