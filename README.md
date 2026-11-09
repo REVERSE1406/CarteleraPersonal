@@ -1,102 +1,391 @@
-# Mi Cartelera Personal · Entregable 4
+# Mi Cartelera Personal – Entregable 4
 
-Evolución del Proyecto 3: aplicación React + TypeScript + Vite para explorar películas/series en TMDB, mantener la lista personal en Supabase y ahora **crear sesiones «Noche de película»** con el tiempo libre real del usuario.
+**Estudiante:** Martín Bastidas  
+**Proyecto:** Mi Cartelera Personal  
+**Nueva función:** Noche de película  
+**Tecnologías:** React, TypeScript, Vite, Bootstrap, TMDB y Supabase
 
-**Autor original del Proyecto 3:** Martín Bastidas. **Evolución E2:** implementación asistida; las comprobaciones que dependen de cuentas y del navegador deben completarse con los resultados reales del estudiante.
+## 1. Descripción del proyecto
 
-## Funciones que permanecen (E1)
+Mi Cartelera Personal es una aplicación web donde los usuarios pueden buscar películas y series, guardarlas en una lista personal y organizar lo que quieren ver.
 
-- Registro, login, cierre de sesión y rutas protegidas.
-- Buscar películas y series en TMDB, guardar en `mi_lista`.
-- Marcar `por_ver` / `viendo` / `vista`, editar comentarios y calificaciones.
-- Filtrar, ordenar, consultar detalles y eliminar títulos.
+Este proyecto empezó en el Entregable 3, donde desarrollé funciones como el registro de usuarios, inicio de sesión, búsqueda de películas, calificaciones, comentarios y estados de los títulos.
 
-## Noche de película (E2)
+Para el Entregable 4 agregué una nueva función llamada **Noche de película**.
 
-En la navegación, entra a **Noche de película** (`/noche-de-pelicula`):
+La idea es que el usuario pueda indicar cuánto tiempo tiene libre y organizar una sesión con películas de su lista que entren en ese tiempo.
 
-1. Introduce un tiempo disponible **entero de 30 a 600 minutos**.
-2. Mira tus películas **por ver**, ordenadas de menor a mayor duración, obtenida mediante `/movie/{id}` de TMDB. Las series no aparecen.
-3. Añade películas a la sesión; se calculan **10 minutos de pausa entre películas**, sin pausa para una película única. El límite exacto cabe. Las duraciones desconocidas/no disponibles se explican, y los errores de TMDB se pueden reintentar.
-4. Observa siempre duración total y minutos restantes. Si te pasas, no permite añadir más ni guardar.
-5. Escribe un nombre y pulsa **Guardar mi noche**. El plan queda en Supabase con snapshot de títulos/duraciones, fecha y usuario. Los títulos **siguen «por ver»**. Puedes repetir una película en otra noche, pero no dos veces en la misma.
-6. Abre **Mis sesiones guardadas** y despliega los detalles; un plan guardado no se edita y no desaparece por eliminar después un título de la lista.
+## 2. Funciones del Proyecto 3 (E1)
 
-## Requisitos
+Las funciones originales que se conservaron son:
 
-- Node.js 22.6+ recomendado (Node 24 funciona), npm.
-- Cuenta Supabase con Auth habilitada y dos usuarios para prueba RLS.
-- API key de **TMDB** para el cliente; la documentación pública: https://developer.themoviedb.org/reference/movie-details.
+- Registro e inicio de sesión con Supabase.
+- Búsqueda de películas y series con TMDB.
+- Lista personal de películas y series.
+- Estados Por ver, Viendo y Vista.
+- Calificaciones y comentarios.
+- Filtros y organización de la lista.
+- Consulta de detalles de películas.
+- Eliminación de películas de la lista.
+- Rutas protegidas para usuarios registrados.
 
-## Instalación y ejecución local (Mac / Windows / Linux)
+La nueva función fue agregada sobre el proyecto anterior, sin reemplazarlo.
+
+## 3. Nueva función: Noche de película (E2)
+
+Noche de película permite organizar una sesión según el tiempo disponible del usuario.
+
+### Cómo funciona
+
+1. El usuario inicia sesión.
+2. Entra a la sección Noche de película.
+3. Ingresa cuántos minutos tiene disponibles.
+4. La aplicación muestra las películas pendientes que pueden entrar en ese tiempo.
+5. El usuario agrega una o varias películas.
+6. La aplicación calcula la duración total y las pausas.
+7. El usuario escribe un nombre y guarda la sesión.
+8. La noche queda guardada en Supabase.
+9. Después puede consultar el historial de sesiones.
+
+### Reglas principales
+
+- El tiempo disponible debe estar entre 30 y 600 minutos.
+- Solo se pueden agregar películas propias en estado Por ver.
+- Las series no están incluidas.
+- La duración de las películas se consulta desde TMDB.
+- Una película sin duración conocida no puede agregarse.
+- Hay una pausa de 10 minutos entre películas.
+- No existe pausa antes de la primera película ni después de la última.
+- Una sesión puede ocupar exactamente el tiempo disponible.
+- No se puede agregar una película que haga superar el límite.
+- Guardar una noche no cambia el estado Por ver.
+- Una película puede estar en varias noches diferentes.
+- No se puede repetir una película dentro de la misma noche.
+- Las sesiones guardadas no se editan.
+- Si se elimina una película de Mi lista, la sesión guardada conserva su información.
+
+## 4. Tecnologías utilizadas
+
+| Tecnología   | Uso                                         |
+| ------------ | ------------------------------------------- |
+| React        | Crear las pantallas y componentes           |
+| TypeScript   | Organizar el código y comprobar los tipos   |
+| Vite         | Ejecutar y compilar el proyecto             |
+| Bootstrap    | Ayudar con los estilos y el diseño          |
+| TMDB         | Buscar películas y consultar sus duraciones |
+| Supabase     | Autenticación y base de datos               |
+| PostgreSQL   | Guardar las sesiones                        |
+| RLS          | Proteger los datos de cada usuario          |
+| Vitest       | Probar las reglas de tiempo y pausas        |
+| Prettier     | Dar formato al código                       |
+| Git y GitHub | Guardar el historial del proyecto           |
+
+## 5. Instalación del proyecto
+
+Para ejecutar el proyecto se necesita Node.js 22 o superior. Durante mis pruebas utilicé Node.js 24.22.2.
+
+Primero se deben instalar las dependencias:
 
 ```bash
 npm install
-cp .env.example .env
 ```
 
-Rellena `.env` **solo localmente**:
+Después se debe crear un archivo `.env` en la raíz del proyecto, usando `.env.example` como referencia.
 
-```dotenv
+Las variables utilizadas son:
+
+```env
 VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-VITE_SUPABASE_ANON_KEY=tu_clave_anon_publica
-VITE_TMDB_API_KEY=tu_clave_de_tmdb
+VITE_SUPABASE_ANON_KEY=tu_clave_publica
+VITE_TMDB_API_KEY=tu_clave_tmdb
 ```
 
-Usa tu archivo `.env` local del Proyecto 3 para conservar la conexión, o configura un proyecto nuevo. **El ZIP entregado no contiene `.env` ni claves privadas**. Nunca añadas `service_role`, passwords ni access tokens a `VITE_*`: la app Vite expone sus variables al navegador.
+Es necesario colocar las claves correspondientes al proyecto.
 
-En el **SQL Editor de Supabase**, aplica en orden, si no estaban aplicadas:
+El archivo `.env` no se sube a GitHub.
 
-1. `supabase/migrations/001_mi_lista.sql` — base del Proyecto 3; **si ya se ejecutó, no repetir** por sus políticas.
-2. `supabase/migrations/002_noche_pelicula.sql` — tabla de sesiones, RLS de lectura y función RPC segura de guardado.
+Las variables VITE son accesibles desde el navegador. Por eso no se deben colocar contraseñas, claves `service_role` ni otros secretos privados.
 
-Después:
+## 6. Configuración de Supabase
+
+Para que Noche de película funcione, se necesita la base de datos de Mi Cartelera Personal.
+
+Los archivos SQL se encuentran en:
+
+`supabase/migrations/`
+
+Se utilizan estas migraciones:
+
+- `001_mi_lista.sql`: configura la lista personal del Proyecto 3.
+- `002_noche_pelicula.sql`: crea las sesiones de Noche de película y sus políticas RLS.
+- `003_corregir_ids_mi_lista.sql`: corrige el guardado de películas con identificadores numéricos.
+
+Para una instalación nueva se deben ejecutar las migraciones en ese orden desde el SQL Editor de Supabase.
+
+Si las tablas ya existen y las migraciones ya fueron aplicadas, no es necesario volver a ejecutarlas.
+
+Durante las pruebas tuve un error porque la función de guardado esperaba UUID, pero mi lista utilizaba IDs numéricos.
+
+Lo solucioné modificando la función `guardar_noche` para que pudiera recibir los identificadores como texto.
+
+Después comprobé que las sesiones se guardaban correctamente en Supabase.
+
+## 7. Cómo ejecutar la aplicación
+
+Para iniciar el servidor:
 
 ```bash
 npm run dev
-npm run test
+```
+
+Vite mostrará una dirección local, normalmente:
+
+`http://localhost:5173/`
+
+Si ese puerto está ocupado, utilizará otro disponible.
+
+Para comprobar que el proyecto compila:
+
+```bash
 npm run build
 ```
 
-El servidor local de Vite indicará su URL (generalmente `http://localhost:5173`). Para una comprobación del dominio **sin instalar Vitest** en Node 22+: `npm run test:offline`.
+Para ejecutar las pruebas:
 
-> **Instalación en esta entrega:** Bootstrap 5.3 se incluye como hoja MIT local en `src/vendor/bootstrap.min.css` (sin dependencia externa en tiempo de ejecución). Vitest y Prettier se añaden al manifiesto para instalar con `npm install`. Si tu copia anterior tiene dependencias instaladas en macOS, instala de nuevo en tu máquina en lugar de copiarlas entre plataformas. `npm install` también actualiza `package-lock.json` si la versión local del lock difiere de `package.json`.
+```bash
+npm run test
+```
 
-## Scripts
+Para ejecutar Vitest mientras se hacen cambios:
 
-| Comando | Resultado |
-| --- | --- |
-| `npm run dev` | Abre el servidor Vite |
-| `npm run build` | TypeScript estricto + build Vite |
-| `npm run test` | Suite Vitest (reglas puras) |
-| `npm run test:watch` | Tests en desarrollo |
-| `npm run test:offline` | 21 comprobaciones puras con Node (sin conexión) |
-| `npm run format` | Prettier para código y documentos |
-| `npm run preview` | Previsualiza el build |
+```bash
+npm run test:watch
+```
 
-## Documentación y harness
+También existe una prueba del dominio sin Vitest:
 
-- `AGENTS.md` (menos de 40 líneas; **ninguna funcionalidad sin spec**, reglas de claves, commits).
-- `CLAUDE.md` importa `@AGENTS.md`.
-- `.claude/skills/commit/SKILL.md` define `/commit` con `disable-model-invocation`.
-- `.claude/settings.json` ejecuta el hook `PostToolUse` que formatea con Prettier archivos editados cuando está instalado.
-- `docs/ESTADO-INICIAL.md` revisa E1, stack y deuda.
-- `docs/prd/PRD.md` define las épicas E1/E2 sin detalle técnico.
-- `docs/backlog/` contiene historias, criterios, casos borde y tickets.
-- `docs/specs/NOCHE-DE-PELICULA.md` detalla contratos, datos, seguridad y trazabilidad.
-- `DESIGN.md` y `docs/diseno/brand-board.html` contienen el sistema de diseño Bootstrap + tema heredado.
-- `docs/VERIFICACION.md`, `docs/AUDITORIA.md` y `docs/PRUEBA-RLS.md` muestran pruebas realizadas y pasos pendientes con evidencia.
-- `docs/CHECKPOINTS.md` contiene los hashes locales para checkpoints.
+```bash
+npm run test:offline
+```
 
-## Seguridad y notas de entrega
+Para dar formato al código:
 
-El navegador **no tiene privilegio de escritura directa** en `sesiones_noche`. Solo puede listar sesiones propias por RLS y guardar mediante `guardar_noche` (valida usuario, lista, estado, runtime y tiempo). Las duraciones se reciben del cliente y se recalcula el total en SQL; no existe un proceso servidor que consulte TMDB para comprobar que el runtime no fue manipulado (límite registrado en la spec).
+```bash
+npm run format
+```
 
-El código, pruebas puras y SQL están preparados. **Desde este entorno no se pudo aplicar la migración a tu Supabase, entrar con dos cuentas ni certificar el funcionamiento real en el navegador.** Sigue `docs/PRUEBA-RLS.md` y llena resultados manuales en `docs/VERIFICACION.md` antes de subir a D2L. El historial conserva el Proyecto 3 y registra documentos antes de código E2; subir los commits a tu repositorio y adjuntar enlaces de checkpoint requiere Git remoto desde tu equipo.
+## 8. Resultados de las pruebas
 
-## Capturas de E1
+Realicé las pruebas en mi Mac con Node.js 24.22.2.
 
-![Login](./imagenes/login.png)
-![Buscador TMDB](./imagenes/buscador.png)
-![Mi lista](./imagenes/lista.png)
-![Detalle](./imagenes/detalle.png)
+### Pruebas automáticas
+
+Ejecuté `npm run test` y obtuve:
+
+| Grupo                                   | Resultado           |
+| --------------------------------------- | ------------------- |
+| Validación del tiempo                   | 12/12               |
+| Cálculo de sesiones y pausas            | 7/7                 |
+| Regla para comprobar si una sesión cabe | 5/5                 |
+| **Total**                               | **24/24 aprobadas** |
+
+También ejecuté `npm run build`.
+
+El proyecto compiló correctamente y Vite transformó 106 módulos.
+
+### Pruebas en la aplicación
+
+Comprobé que:
+
+- Se validan los tiempos de 29, 30, 600 y 601 minutos.
+- Las pausas de 10 minutos se calculan correctamente.
+- No se permite superar el tiempo disponible.
+- Se pueden guardar sesiones en Supabase.
+- Las sesiones aparecen en el historial.
+- Las películas siguen en estado Por ver.
+- El historial conserva películas eliminadas de Mi lista.
+- La aplicación muestra errores de TMDB y permite reintentar.
+
+### Pruebas de seguridad
+
+Utilicé dos cuentas diferentes para comprobar que cada usuario solamente pudiera consultar sus propias sesiones.
+
+También realicé consultas SQL para verificar las políticas RLS.
+
+En una de las pruebas, el Usuario B obtuvo:
+
+- Sesiones propias: 1.
+- Sesiones ajenas: 0.
+
+Comprobé además que el rol authenticated no tiene permisos directos para insertar, modificar ni eliminar sesiones.
+
+Por último, intenté guardar una película del Usuario A utilizando la identidad del Usuario B. Supabase rechazó la operación.
+
+Los resultados completos están registrados en:
+
+- `docs/VERIFICACION.md`
+- `docs/AUDITORIA.md`
+- `docs/PRUEBA-RLS.md`
+
+Las capturas están guardadas en `docs/evidencias/`.
+
+## 9. Organización del código
+
+La nueva función está separada en diferentes partes para que sea más fácil entenderla.
+
+### Dominio
+
+`src/dominio/nocheDePelicula.ts`
+
+Contiene las reglas para validar el tiempo, sumar las duraciones y comprobar si una película cabe en una sesión.
+
+Esta lógica no necesita conectarse con Supabase ni TMDB.
+
+Las pruebas se encuentran en:
+
+`src/dominio/nocheDePelicula.test.ts`
+
+### Servicios
+
+`src/services/tmdb.ts`
+
+Se encarga de consultar las películas y sus duraciones.
+
+`src/services/nocheDePelicula.ts`
+
+Se encarga de consultar y guardar sesiones en Supabase.
+
+### Interfaz
+
+`src/pages/NocheDePeliculaPage.tsx`
+
+Contiene la pantalla principal de Noche de película.
+
+`src/noche.css`
+
+Contiene los estilos de esta sección.
+
+`src/App.tsx`
+
+Incluye la ruta protegida de Noche de película.
+
+### Base de datos
+
+Las migraciones SQL están dentro de:
+
+`supabase/migrations/`
+
+## 10. Harness del proyecto
+
+Para este entregable preparé una configuración para trabajar con Claude Code siguiendo las indicaciones de la tarea.
+
+El harness contiene los archivos que ayudan al agente a conocer las reglas y la organización del proyecto.
+
+### AGENTS.md
+
+Contiene las reglas principales, como:
+
+- No agregar funcionalidades sin una spec.
+- Conservar las funciones del Proyecto 3.
+- Separar componentes, servicios y lógica del dominio.
+- No utilizar claves privadas dentro del código.
+- Ejecutar pruebas antes de registrar los cambios.
+
+### CLAUDE.md
+
+Importa las reglas de `AGENTS.md` y señala los documentos importantes que debe consultar el agente.
+
+### Skill /commit
+
+Se encuentra en:
+
+`.claude/skills/commit/SKILL.md`
+
+Está preparada para ayudar a revisar cambios y crear commits.
+
+### Hook de Prettier
+
+Su configuración está en:
+
+`.claude/settings.json`
+
+Y el script está en:
+
+`.claude/hooks/format-prettier.mjs`
+
+El hook está preparado para formatear archivos modificados por Claude Code.
+
+**Estado de verificación:** los archivos del harness están incluidos en el repositorio, pero no comprobé la ejecución completa de Claude Code porque no tenía una cuenta con acceso al servicio.
+
+Por eso, la ejecución real de la skill y del hook está registrada como SIN VERIFICAR en la auditoría.
+
+## 11. Documentación del proyecto
+
+El repositorio contiene los siguientes documentos:
+
+| Documento                         | Contenido                                 |
+| --------------------------------- | ----------------------------------------- |
+| `docs/ESTADO-INICIAL.md`          | Funcionamiento del Proyecto 3 antes de E2 |
+| `docs/prd/PRD.md`                 | Requisitos y decisiones del proyecto      |
+| `docs/backlog/HISTORIAS.md`       | Historias de usuario y criterios          |
+| `docs/backlog/REFINAMIENTO.md`    | Casos especiales y decisiones             |
+| `docs/backlog/TICKETS.md`         | Tareas de implementación                  |
+| `docs/specs/NOCHE-DE-PELICULA.md` | Especificación técnica                    |
+| `DESIGN.md`                       | Sistema de diseño                         |
+| `docs/diseno/brand-board.html`    | Referencias visuales                      |
+| `docs/VERIFICACION.md`            | Resultados de las pruebas                 |
+| `docs/AUDITORIA.md`               | Revisión de requisitos y pendientes       |
+| `docs/PRUEBA-RLS.md`              | Pruebas de seguridad                      |
+| `docs/CHECKPOINTS.md`             | Referencias de los checkpoints            |
+
+## 12. Problemas encontrados y pendientes
+
+Durante el desarrollo encontré varios problemas que fui corrigiendo.
+
+Los principales fueron:
+
+- Actualización de Node.js para cumplir los requisitos de Supabase.
+- Creación de la tabla sesiones_noche.
+- Corrección de IDs numéricos en la función guardar_noche.
+- Comprobación de los permisos y políticas RLS.
+- Pruebas de errores de TMDB.
+
+También quedaron pendientes algunas verificaciones:
+
+- Revisar todas las funciones originales del Proyecto 3.
+- Completar las pruebas de interfaz que aparecen como SIN VERIFICAR.
+- Probar el diseño en diferentes tamaños de pantalla.
+- Comprobar la navegación con teclado.
+- Verificar la ejecución real del harness de Claude Code.
+- Revisar las vulnerabilidades que todavía reporta npm.
+
+Los criterios pendientes están explicados en `docs/AUDITORIA.md`, junto con las razones por las que todavía no se marcaron como cumplidos.
+
+Durante las pruebas desactivé la confirmación de correo en Supabase. Antes de publicar la aplicación para uso real, debo revisar nuevamente esa configuración.
+
+## 13. Historial Git y repositorio
+
+El proyecto conserva el historial original del Proyecto 3.
+
+Para el Entregable 4 se agregaron commits de manera ordenada para documentar:
+
+- Configuración del harness.
+- Estado inicial y sistema de diseño.
+- PRD, historias y especificaciones.
+- Implementación de Noche de película.
+- Pruebas y correcciones de Supabase.
+- Verificación, evidencias y auditoría.
+
+El código y los commits se encuentran en GitHub:
+
+https://github.com/REVERSE1406/CarteleraPersonal
+
+## 14. Conclusión
+
+Con este entregable pude agregar una nueva función a Mi Cartelera Personal sin tener que rehacer todo el proyecto.
+
+Noche de película permite aprovechar mejor el tiempo disponible, organizar películas pendientes y guardar sesiones para consultarlas después.
+
+Las pruebas principales funcionaron correctamente, incluyendo los cálculos de duración, las pausas, el guardado en Supabase y la seguridad entre usuarios.
+
+También pude organizar mejor el trabajo mediante documentos, tickets, pruebas y commits de Git.
